@@ -2,12 +2,26 @@ import { SignIn } from "./SignIn";
 import { Meta, StoryObj } from "@storybook/react";
 import { within, userEvent, waitFor } from "@storybook/testing-library";
 import { expect } from "@storybook/jest";
+import { rest } from "msw";
 
 export default {
-  title: "Pages/SignIn",
+  title: "Pages/Sign in",
   component: SignIn,
   args: {},
   argTypes: {},
+  parameters: {
+    msw: {
+      handlers: [
+        rest.post("/sessions", (req, res, ctx) => {
+          return res(
+            ctx.json({
+              message: "Login realizado!",
+            })
+          );
+        }),
+      ],
+    },
+  },
 } as Meta;
 
 export const Default: StoryObj = {
@@ -16,13 +30,14 @@ export const Default: StoryObj = {
 
     userEvent.type(
       canvas.getByPlaceholderText("Digite seu e-mail"),
-      "paulo.nobrega@kryptus.com"
+      "paulo.nobrega@gmail.com"
     );
-    userEvent.type(canvas.getByPlaceholderText("********"), "plry3w6*");
+    userEvent.type(canvas.getByPlaceholderText("******"), "12345678");
+
     userEvent.click(canvas.getByRole("button"));
 
     await waitFor(() => {
-      return expect(canvas.getByText("Login Realizado!")).toBeInTheDocument();
+      return expect(canvas.getByText("Login realizado!")).toBeInTheDocument();
     });
   },
 };

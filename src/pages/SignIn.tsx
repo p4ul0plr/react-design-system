@@ -6,12 +6,19 @@ import { Button } from "../components/Button";
 import { Heading } from "../components/Heading";
 import { Textinput } from "../components/Textinput";
 import { Text } from "../components/Text";
+import axios from "axios";
 
 export function SignIn() {
   const [isUserSignedIn, setIsUserSignedIn] = useState(false);
 
-  function handleSignIn(event: FormEvent) {
+  async function handleSignIn(event: FormEvent) {
     event.preventDefault();
+
+    await axios.post("/sessions", {
+      email: "paulo.nobrega@gmail.com",
+      password: "12345678",
+    });
+
     setIsUserSignedIn(true);
   }
 
@@ -31,7 +38,7 @@ export function SignIn() {
         onSubmit={handleSignIn}
         className="flex flex-col gap-4 items-stretch w-full max-w-sm mt-10"
       >
-        {isUserSignedIn && <Text>Login Realizado!</Text>}
+        {isUserSignedIn && <Text>Login realizado!</Text>}
 
         <label htmlFor="email" className="flex flex-col gap-3">
           <Text className="font-semibold">Endereço de e-mail</Text>
@@ -49,7 +56,7 @@ export function SignIn() {
             <Textinput.Icon>
               <Lock />
             </Textinput.Icon>
-            <Textinput.Input id="password" placeholder="********" />
+            <Textinput.Input id="password" placeholder="******" />
           </Textinput.Root>
         </label>
 
